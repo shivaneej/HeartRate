@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HeartRate</string>
+    <string name="start_btn_msg">Press to Start</string>
 </resources>
