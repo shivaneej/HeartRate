@@ -1,8 +1,3 @@
-// CameraActivity.java, an activity for heart rate detection, displaying the camera output to
-// the screen, and playing an animation when a heart beat is detected.
-// - Wesley Chavez, 11/28/16
-// Adapted from code at http://stackoverflow.com/questions/39260034/android-studio-camera2-eliminate-noise
-//
 // This activity displays camera output on the screen and detects a heartbeat from the blood
 // oscillations present in the finger (placed on the camera lens) when the torch is enabled.  A
 // bitmap is created from the texture (screen) in order to gather luminance information and

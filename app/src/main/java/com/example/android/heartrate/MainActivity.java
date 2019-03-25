@@ -16,9 +16,6 @@ import com.example.android.heartrate.R;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by jonathanwaldrip on 12/2/16.
- */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,18 +43,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
-    /**
-     * Actions on activites closing
-     */
+    //on activity closing
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
