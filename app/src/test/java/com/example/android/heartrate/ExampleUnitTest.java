@@ -1,4 +1,4 @@
-package com.example.heartrate;
+package com.example.android.heartrate;
 
 import org.junit.Test;
 
