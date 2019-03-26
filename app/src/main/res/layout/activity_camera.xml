@@ -1,20 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/heartImg"
-        android:src="@drawable/heart"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom = "true"/>
-    <TextureView
-        android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+<TextureView
+    android:id="@+id/texture"
+    android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.8"
+    android:screenOrientation="portrait" />
 
-    <!-- android:layout_above="@+id/btn_takepicture"
-        android:layout_alignParentTop="true" -->
-</RelativeLayout>
+<FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.2">
+
+    <TextView
+        android:id="@+id/neechewalatext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:padding="5dp"
+        android:text="Place your finger lightly on the camera lens. Try not to move it. Elevating your arm increases accuracy." />
+
+</FrameLayout>
+
+</LinearLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical">-->
+
+    <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/heartImg"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:src="@drawable/heart"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="60dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="60dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_alignParentBottom = "true"/>&ndash;&gt;-->
+    <!--<FrameLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="0.5"-->
+    <!--android:id="@+id/camera"-->
+    <!--&gt;-->
+    <!--<TextureView-->
+    <!--android:id="@+id/texture"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:screenOrientation="portrait"/>-->
+    <!--</FrameLayout>-->
+
+    <!--<FrameLayout-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="0.5"-->
+    <!--android:layout_above="@id/camera">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:text="Place your finger on the camera completely." />-->
+
+    <!--</FrameLayout>-->
+
+
+    <!--&lt;!&ndash; android:layout_above="@+id/btn_takepicture"-->
+    <!--android:layout_alignParentTop="true" &ndash;&gt;-->
+    <!--</RelativeLayout>-->

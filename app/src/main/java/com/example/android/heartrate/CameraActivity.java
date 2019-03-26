@@ -32,6 +32,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Arrays;
 
@@ -87,17 +88,10 @@ public class CameraActivity extends AppCompatActivity {
         // Set a listener when the screen is updated.
         textureView.setSurfaceTextureListener(textureListener);
 
-        // Inflate and display heart image
-        heartView =  findViewById(R.id.heartImg);
-        heartView.bringToFront();
-
         // Create an array for storing the current time in milliseconds whenever a heartbeat is
         // detected.
         mTimeArray = new long [30];
 
-        // Display a toast for user with directions on how to proceed.
-        Toast.makeText(getApplicationContext(), ("Place your finger lightly on the camera lens." +
-                "  Try not to move it.  Elevating your arm increases accuracy."), Toast.LENGTH_LONG).show();
     }
     // Intent for Camera Activity
     public static Intent newIntent(Context packageContext) {
@@ -164,9 +158,7 @@ public class CameraActivity extends AppCompatActivity {
                     // Increment the number of beats detected
                     mNumBeats++;
 
-                    // Play sound and animate heart image
-                    //playSound();
-                    heartView.setImageResource(R.drawable.heart2);
+
                     // If 15 beats have been found, this is sufficient and calculate heart rate.
                     if (mNumBeats == 15) {
                         calcBPM();
@@ -239,8 +231,8 @@ public class CameraActivity extends AppCompatActivity {
         // med is in milliseconds
         mHeartRateInBPM = 60000/med;
         // Show user their heart rate
-        Toast.makeText(getApplicationContext(), ("Heart Rate = " + mHeartRateInBPM + "BPM"), Toast.LENGTH_LONG).show();
-        // Put heart rate in an extra for Main Activity to save in SQL database
+        TextView tv = (TextView)findViewById(R.id.neechewalatext);
+        tv.setText("Heart Rate = "+mHeartRateInBPM+" BPM");
         Intent data = new Intent();
         data.putExtra(EXTRA_RESULT_HEART_RATE, mHeartRateInBPM);
         setResult(RESULT_OK, data);
