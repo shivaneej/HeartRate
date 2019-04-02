@@ -48,19 +48,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
-    //on activity closing
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // check to see if it is correct activity that was closed
-        if (resultCode == RESULT_OK && requestCode == RESULTS_CODE) {
-            if (data == null) {
-                return;
-            } else {
-
-                // get heart rate from intent extra
-                mHeartRate = CameraActivity.getHeartRate(data);
-            }
-        }
-    }
 }

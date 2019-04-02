@@ -8,7 +8,6 @@ package com.example.android.heartrate;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
@@ -28,10 +27,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Size;
-import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Arrays;
@@ -39,16 +36,6 @@ import java.util.Arrays;
 public class CameraActivity extends AppCompatActivity {
     private static final String TAG = "CameraActivity";
     private TextureView textureView; //TextureView to deploy camera data
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    private ImageView heartView; //To show heart animation in sync with heartbeat
-
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
-    // Camera member variables
     private String cameraId;
     protected CameraDevice cameraDevice;
     protected CameraCaptureSession cameraCaptureSessions;
@@ -71,10 +58,7 @@ public class CameraActivity extends AppCompatActivity {
     private static final String EXTRA_RESULT_HEART_RATE =
             "package com.example.android.heartrate;";
 
-    // To Return result to Main Activity
-    public static int getHeartRate(Intent result) {
-        return result.getIntExtra(EXTRA_RESULT_HEART_RATE, 0);
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +78,10 @@ public class CameraActivity extends AppCompatActivity {
 
     }
     // Intent for Camera Activity
-    public static Intent newIntent(Context packageContext) {
-        Intent i = new Intent(packageContext, CameraActivity.class);
-        return i;
-    }
+//    public static Intent newIntent(Context packageContext) {
+//        Intent i = new Intent(packageContext, CameraActivity.class);
+//        return i;
+//    }
     // TextureListener to listen for updates in screen pixels
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -134,9 +118,7 @@ public class CameraActivity extends AppCompatActivity {
             int sum = 0;
             for (int i = 0; i < height * width; i++) {
                 int red = (pixels[i] >> 16) & 0xFF;
-                //int green = (pixels[i] >> 8) & 0xFF;
-                //int blue = (pixels[i]) & 0xFF;
-                sum = sum + red;// + green + blue;
+                sum = sum + red;
             }
             // Waits 20 captures, to remove startup artifacts.  First average is the sum.
             if (numCaptures == 20) {
@@ -233,9 +215,9 @@ public class CameraActivity extends AppCompatActivity {
         // Show user their heart rate
         TextView tv = (TextView)findViewById(R.id.neechewalatext);
         tv.setText("Heart Rate = "+mHeartRateInBPM+" BPM");
-        Intent data = new Intent();
-        data.putExtra(EXTRA_RESULT_HEART_RATE, mHeartRateInBPM);
-        setResult(RESULT_OK, data);
+        //Intent data = new Intent();
+        //data.putExtra(EXTRA_RESULT_HEART_RATE, mHeartRateInBPM);
+        //setResult(RESULT_OK, data);
     }
     // After the camera device is opened, it calls this method
     protected void createCameraPreview() {
@@ -282,7 +264,7 @@ public class CameraActivity extends AppCompatActivity {
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
-            // Add permission for camera and let user grant the permission
+             //Add permission for camera and let user grant the permission
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                 return;
