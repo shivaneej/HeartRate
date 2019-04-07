@@ -3,7 +3,6 @@
 // bitmap is created from the texture (screen) in order to gather luminance information and
 // detect a heart rate from the oscillations in the luminance values.
 
-
 package com.example.android.heartrate;
 
 import android.Manifest;
@@ -55,44 +54,28 @@ public class CameraActivity extends AppCompatActivity {
     private long [] mTimeArray;
     private int numCaptures = 0;
     private int mNumBeats = 0;
-    private static final String EXTRA_RESULT_HEART_RATE =
-            "package com.example.android.heartrate;";
-
+    TextView tv;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // Inflate and display texture (camera data)
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         textureView =  findViewById(R.id.texture);
         assert textureView != null;
-
-        // Set a listener when the screen is updated.
         textureView.setSurfaceTextureListener(textureListener);
-
-        // Create an array for storing the current time in milliseconds whenever a heartbeat is
-        // detected.
-        mTimeArray = new long [30];
+        mTimeArray = new long [15];
+        tv = (TextView)findViewById(R.id.neechewalatext);
 
     }
-    // Intent for Camera Activity
-//    public static Intent newIntent(Context packageContext) {
-//        Intent i = new Intent(packageContext, CameraActivity.class);
-//        return i;
-//    }
-    // TextureListener to listen for updates in screen pixels
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            //open your camera here
             openCamera();
         }
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            // Transform you image captured size according to the surface width and height
         }
 
         @Override
@@ -100,21 +83,16 @@ public class CameraActivity extends AppCompatActivity {
             return false;
         }
 
-        // Gets called whenever the surface texture is updated (a variable 20-100 ms)
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             Log.d(TAG, "onSurfaceTextureUpdated");
-            // Get bitmap of pixels from texture
             Bitmap bmp = textureView.getBitmap();
             int width = bmp.getWidth();
             int height = bmp.getHeight();
-            // Integer array to store formatted pixel values.
             int[] pixels = new int[height * width];
             // Get pixels from the bitmap, starting at (x,y) = (width/2,height/2)
             // and totaling width/20 rows and height/20 columns
             bmp.getPixels(pixels, 0, width, width / 2, height / 2, width / 20, height / 20);
-
-            // Gets red channel information and calculates sum
             int sum = 0;
             for (int i = 0; i < height * width; i++) {
                 int red = (pixels[i] >> 16) & 0xFF;
@@ -132,21 +110,16 @@ public class CameraActivity extends AppCompatActivity {
             // From 49 on, the rolling average incorporates the last 30 rolling averages.
             else if (numCaptures >= 49) {
                 mCurrentRollingAverage = (mCurrentRollingAverage*29 + sum)/30;
-                // Peak detector/heartbeat detector.  Last and LastLast refer to the previous two
-                // values of the rolling average.
                 if (mLastRollingAverage > mCurrentRollingAverage && mLastRollingAverage > mLastLastRollingAverage && mNumBeats < 15) {
-                    // Save the current time
                     mTimeArray[mNumBeats] = System.currentTimeMillis();
-                    // Increment the number of beats detected
+//                    tv.setText("beats="+mNumBeats+"\ntime="+mTimeArray[mNumBeats]);
                     mNumBeats++;
-
-
-                    // If 15 beats have been found, this is sufficient and calculate heart rate.
                     if (mNumBeats == 15) {
                         calcBPM();
                     }
                 }
             }
+
             // Another capture
             numCaptures++;
             // Save previous two values
@@ -154,12 +127,9 @@ public class CameraActivity extends AppCompatActivity {
             mLastRollingAverage = mCurrentRollingAverage;
         }
     };
-    // A callback objects for receiving updates about the state of a camera device.  The callback
-    // is passed to openCamera()
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(CameraDevice camera) {
-            //This is called when the camera is open
             Log.e(TAG, "onOpened");
             cameraDevice = camera;
             createCameraPreview();
@@ -196,49 +166,32 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    // Calculate heart rate, put in in an intent's extra for the Main Activity
     private void calcBPM() {
-        // Median distance between two peaks of rolling average
         int med;
-        // Populate distance array with subtraction of consecutive peaks (15 peaks detected, 14
-        // time differences between peaks).
         long [] timedist = new long [14];
         for (int i = 0; i < 14; i++) {
             timedist[i] = mTimeArray[i+1] - mTimeArray[i];
         }
-        // Sort to find median
         Arrays.sort(timedist);
-        // Midway through the sorted array.
         med = (int) timedist[timedist.length/2];
-        // med is in milliseconds
         mHeartRateInBPM = 60000/med;
-        // Show user their heart rate
         TextView tv = (TextView)findViewById(R.id.neechewalatext);
         tv.setText("Heart Rate = "+mHeartRateInBPM+" BPM");
-        //Intent data = new Intent();
-        //data.putExtra(EXTRA_RESULT_HEART_RATE, mHeartRateInBPM);
-        //setResult(RESULT_OK, data);
     }
-    // After the camera device is opened, it calls this method
     protected void createCameraPreview() {
         try {
-            // Create a surface from our texture (screen view of camera data) with size of camera
-            // characteristics
             SurfaceTexture texture = textureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(imageDimension.getWidth(), imageDimension.getHeight());
             Surface surface = new Surface(texture);
-            // Create a capture request and add the newly-created surface as a target.
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(surface);
             cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    //The camera is already closed
                     if (null == cameraDevice) {
                         return;
                     }
-                    // When the session is ready, we start displaying the preview.
                     cameraCaptureSessions = cameraCaptureSession;
                     updatePreview();
                 }
@@ -257,14 +210,11 @@ public class CameraActivity extends AppCompatActivity {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
         try {
-            // 0 is the rear-facing camera
             cameraId = manager.getCameraIdList()[0];
-            //Get output sizes from the camera and save to member variable
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
-             //Add permission for camera and let user grant the permission
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(CameraActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                 return;
@@ -275,23 +225,18 @@ public class CameraActivity extends AppCompatActivity {
         }
         Log.e(TAG, "openCamera X");
     }
-    // Called in createCameraPreview(), sets automatic control mode and enables flash.
     protected void updatePreview() {
         if (null == cameraDevice) {
             Log.e(TAG, "updatePreview error, return");
         }
-        // Auto control mode
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
-        // Enable flash
         captureRequestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH);
         try {
-            // Request to keep capturing data from camera
             cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
-    // Closes camera
     private void closeCamera() {
         if (null != cameraDevice) {
             cameraDevice.close();
@@ -299,7 +244,6 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    // If permission not granted, display toast and close.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
@@ -310,7 +254,6 @@ public class CameraActivity extends AppCompatActivity {
             }
         }
     }
-    // Start thread, open camera or set the surface texture listener
     @Override
     protected void onResume() {
         super.onResume();
@@ -322,7 +265,6 @@ public class CameraActivity extends AppCompatActivity {
             textureView.setSurfaceTextureListener(textureListener);
         }
     }
-    // Don't forget to close the camera and kill the thread.
     @Override
     protected void onPause() {
         Log.e(TAG, "onPause");
@@ -341,7 +283,6 @@ public class CameraActivity extends AppCompatActivity {
         super.onStop();
     }
 }
-
 
 
 
