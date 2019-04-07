@@ -10,11 +10,6 @@ An Android App used to monitor heart rate using device camera and flashlight.
 * Wait for a few seconds
 * The application will display your heart rate calculated in Beats per Minute
 
-## Demo
-<div align="center">
-  <img src="demo.gif" width="500px">
-</div>
-
 ## Permissions Required:
 * Camera
 
