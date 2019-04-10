@@ -15,11 +15,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     private SignInButton signBtn;
@@ -57,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
     private void signIn()
     {
+        addTodb();
         Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signIntent,RC_SIGN_IN);
     }
@@ -78,12 +88,37 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    Toast.makeText(LoginActivity.this,"Login Successful.",Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Auth Error",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Authentication Error",Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+    private void addTodb()
+    {
+        FirebaseApp.initializeApp(LoginActivity.this);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> user = new HashMap<>();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        user.put("timestamp", timestamp);
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Toast.makeText(LoginActivity.this,"Timestamp updated.",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(LoginActivity.this,"Error",Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

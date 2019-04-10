@@ -2,5 +2,5 @@
     <string name="app_name">HeartRate</string>
     <string name="mainBtn">Press to Start</string>
     <string name="GmailSignIn">Sign In with Gmail</string>
-    <!--<string name="default_web_client_id">297101578003-kosmeqvbs8tur8lkv2lvk9blt0l77cq6.apps.googleusercontent.com</string>-->
+    <string name="SignOut">Sign Out</string>
 </resources>
