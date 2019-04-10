@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "297101578003",
+    "firebase_url": "https://heartrate-ff48d.firebaseio.com",
+    "project_id": "heartrate-ff48d",
+    "storage_bucket": "heartrate-ff48d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297101578003:android:4b8dea1be5f57f74",
+        "android_client_info": {
+          "package_name": "com.example.android.heartrate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297101578003-kosmeqvbs8tur8lkv2lvk9blt0l77cq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBERzJ7Z1876mL73ynbMAis5tThB6RujX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297101578003-kosmeqvbs8tur8lkv2lvk9blt0l77cq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
