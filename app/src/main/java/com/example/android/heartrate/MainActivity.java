@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private Button mRunButton,signOutButton;
+    public String s;
     private static final int RESULTS_CODE = 123;
     private int mHeartRate;
     public static Context context;
@@ -36,6 +37,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         signOutButton = (Button) findViewById(R.id.signout);
+        Button button=findViewById(R.id.view_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,view_history.class);
+                intent.putExtra("email",s);
+                startActivity(intent);
+            }
+        });
         email = (TextView)findViewById(R.id.useremail);
         auth = FirebaseAuth.getInstance();
         context = this;
@@ -49,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(MainActivity.this,CameraActivity.class);
+                i.putExtra("email",s);
                 startActivity(i);
             }
         });
@@ -62,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 }else{
+                    s=user.getEmail();
                     email.setText(user.getEmail());
                     Log.d("HEY","Signed in");
                 }

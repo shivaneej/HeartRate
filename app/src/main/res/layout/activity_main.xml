@@ -13,11 +13,26 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="320dp"
+        android:layout_marginEnd="74dp"
+        android:layout_marginBottom="468dp"
         android:background="@color/colorPrimary"
         android:padding="16dp"
         android:text="@string/mainBtn"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/view_button"
+        android:layout_width="272dp"
+        android:layout_height="88dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="77dp"
+        android:layout_marginBottom="276dp"
+        android:background="@color/colorPrimary"
+        android:padding="16dp"
+        android:text="View History"
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
@@ -29,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="38dp"
         android:background="@android:color/transparent"
         android:text="@string/SignOut"
         android:textColor="@color/colorPrimary" />
